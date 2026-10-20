@@ -1,0 +1,397 @@
+<!doctype html><html><head><meta charset=utf8><title>Devani Home Menu</title><meta name=robots content="noindex"><meta name=description content="Weekly home menu and shopping list"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Young+Serif&display=swap">
+<style>
+/* Layout: one narrow reading column. Tabs switch between this week, next week and recipes. Day rows have a date block on the left. */
+:root{
+  --bg:#f5f8f2; --surface:#ffffff; --ink:#17301f; --muted:#5a6e5f; --line:#dbe5d6;
+  --accent:#c77d0a; --accent-soft:#f8e9c9; --leaf:#2f6b3f; --leaf-soft:#dcebd9; --chili:#a8324a; --chili-soft:#f6dde2;
+  --display:"Young Serif",Georgia,"Times New Roman",serif; --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101a13; --surface:#18271c; --ink:#e9f1e6; --muted:#a3b5a7; --line:#2a3d2f;
+    --accent:#e8a533; --accent-soft:#3a2c0f; --leaf:#7fc58f; --leaf-soft:#1f3a26; --chili:#ee8aa0; --chili-soft:#3b1b24; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101a13; --surface:#18271c; --ink:#e9f1e6; --muted:#a3b5a7; --line:#2a3d2f;
+  --accent:#e8a533; --accent-soft:#3a2c0f; --leaf:#7fc58f; --leaf-soft:#1f3a26; --chili:#ee8aa0; --chili-soft:#3b1b24; color-scheme:dark;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:28px 56px}
+.wrap{max-width:720px;margin-inline:auto;display:flex;flex-direction:column;gap:28px}
+header h1{font-family:var(--display);font-weight:400;font-size:clamp(2rem,7vw,2.8rem);line-height:1.1;margin:6px 0 10px;text-wrap:balance}
+.kicker{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+header p{color:var(--muted);margin:0;max-width:60ch}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tabs button{font:inherit;font-weight:700;font-size:.92rem;padding:9px 16px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--leaf);border-color:var(--leaf);color:var(--bg)}
+section.panel{display:flex;flex-direction:column;gap:30px}
+h2{font-family:var(--display);font-weight:400;font-size:1.5rem;margin:0 0 4px;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 14px;font-size:.95rem}
+.days{display:flex;flex-direction:column;gap:12px}
+.day{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+.date{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--leaf-soft);color:var(--leaf);border-radius:8px;padding:8px 0;font-weight:700;line-height:1.1}
+.date b{font-size:1.5rem}
+.date span{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
+.day h3{margin:0 0 4px;font-size:1.05rem;line-height:1.3}
+.day p{margin:0 0 8px;color:var(--muted);font-size:.95rem}
+.tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tag{font-size:.75rem;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--accent-soft);color:var(--accent)}
+.tag.mex{background:var(--chili-soft);color:var(--chili)}
+.tag.guj{background:var(--leaf-soft);color:var(--leaf)}
+.meta{font-size:.84rem;color:var(--muted)}
+.fill{margin-top:8px;font-size:.88rem;color:var(--ink)}
+.fill b{color:var(--leaf)}
+.link{margin-top:8px;font-size:.85rem}
+.link a{color:var(--leaf);font-weight:700;cursor:pointer;text-decoration:underline}
+.day.out{background:transparent;border-style:dashed}
+.day.out .date{background:var(--accent-soft);color:var(--accent)}
+.swaps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.swap{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.swap h3{margin:0;font-size:1.02rem;line-height:1.3}
+.swap p{margin:0;color:var(--muted);font-size:.93rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.group{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+.group h3{margin:0 0 8px;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--leaf)}
+.group ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.group label{display:flex;gap:9px;align-items:flex-start;font-size:.95rem;cursor:pointer}
+.group input{margin-top:4px;accent-color:var(--leaf);width:16px;height:16px;flex:none}
+.group input:checked + span{text-decoration:line-through;color:var(--muted)}
+.rec{display:flex;flex-direction:column;gap:10px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:0}
+details summary{cursor:pointer;padding:14px;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details summary::after{content:"+";color:var(--accent);font-size:1.3rem;line-height:1}
+details[open] summary::after{content:"\2212"}
+details .body{padding:0 14px 14px;display:flex;flex-direction:column;gap:8px;font-size:.95rem}
+details .body h4{margin:6px 0 0;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--leaf)}
+details .body ul,details .body ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px}
+details .body p{margin:0;color:var(--muted)}
+.note{background:var(--accent-soft);border-radius:10px;padding:16px}
+.note h2{font-size:1.2rem}
+.note p{margin:6px 0 0}
+.fine{font-size:.85rem;color:var(--muted)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media (max-width:420px){.day{grid-template-columns:54px minmax(0,1fr);gap:10px}}
+
+.printbtn{font:inherit;font-weight:700;font-size:.92rem;padding:9px 16px;border-radius:99px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);cursor:pointer;margin-left:auto}
+.tabs button.printbtn{margin-left:auto;border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+@media print{
+  :root{color-scheme:light}
+  body{background:#fff;color:#000;padding:0;font-size:12pt}
+  .tabs,.note,.printbtn{display:none!important}
+  .day,.group,.swap,details{break-inside:avoid;box-shadow:none}
+  details .body{display:flex!important}
+  a{text-decoration:none}
+}
+
+.buy{display:none;gap:6px;flex-wrap:wrap;margin:2px 0 6px 25px}
+.buyon .buy{display:flex}
+.buy a{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--leaf);text-decoration:none;background:var(--leaf-soft)}
+.shoptools{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.shoptools button{font:inherit;font-weight:700;font-size:.85rem;padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.vendor{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:14px}
+.vrow{display:flex;gap:8px;align-items:center;padding:4px 0}.vn{flex:1}.gnum{width:80px;font:inherit;padding:4px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}.vmsg{white-space:pre-wrap;font:inherit;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;margin:6px 0}
+.envend{margin-top:12px;color:var(--muted,#666);font-size:.9rem}.envend pre{white-space:pre-wrap;font:inherit;margin:4px 0 0}
+.vendor textarea{width:100%;min-height:150px;font:inherit;font-size:.95rem;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--bg);color:var(--ink);box-sizing:border-box}
+@media print{.shoptools,.buy,.vendor{display:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="kicker">Rushi and Dipali's lunches</div>
+    <h1>Weekly menu</h1>
+    <p>One main meal a day, with one day a weekend out for lunch. Every plate is built to be filling: a protein, a gluten-free base, a big salad or vegetables, and a good fat. All vegetarian, light on spice, cooked in ghee or olive oil.</p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Menu sections">
+    <button role="tab" id="t-w1" aria-selected="true" aria-controls="p-w1">This week 12 to 18 Oct</button>
+    <button role="tab" id="t-w2" aria-selected="false" aria-controls="p-w2">Next week 19 to 25 Oct</button>
+    <button role="tab" id="t-w3" aria-selected="false" aria-controls="p-w3">From 2 Nov</button>
+    <button role="tab" id="t-rec" aria-selected="false" aria-controls="p-rec">Recipes</button>
+    <button type="button" class="printbtn" id="printbtn" title="Prints the tab you are looking at. Choose Save as PDF in the print window.">Print or save as PDF</button>
+  </div>
+
+  <section class="panel" id="p-w1" role="tabpanel" aria-labelledby="t-w1"></section>
+  <section class="panel" id="p-w2" role="tabpanel" aria-labelledby="t-w2" hidden></section>
+  <section class="panel" id="p-w3" role="tabpanel" aria-labelledby="t-w3" hidden></section>
+  <section class="panel" id="p-rec" role="tabpanel" aria-labelledby="t-rec" hidden></section>
+
+  <section class="note">
+    <h2>How the week works</h2>
+    <p>Menus run Monday to Sunday and arrive by Friday night for the following week, so you can order on the weekend. One weekend day is lunch out. This menu covers 12 to 25 October, then a break, and starts again Monday 2 November.</p>
+    <h2 style="margin-top:14px">What changed after your feedback</h2>
+    <p>Meals are bigger and fuller. Zucchini boats are gone, and the pulao now comes with paneer tikka and a chana salad. New this time: a non-wheat pizza, tofu scramble brunch, kati rolls and a wheatless tortilla. Where tempeh is hard to find, use tofu or paneer. New dishes have a recipe in the Recipes tab; dishes you already make do not.</p>
+    <p class="fine" style="margin-top:10px">Protein is a rough estimate for Rushi / Dipali. A plan for the week, not a rule.</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  function h(tag, attrs, kids) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) { if (k === 'text') e.textContent = attrs[k]; else if (k === 'class') e.className = attrs[k]; else e.setAttribute(k, attrs[k]); }
+    (kids || []).forEach(function (c) { if (c) e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function openRecipe(id) {
+    show('rec');
+    var d = document.getElementById('r-' + id);
+    if (d) { d.open = true; d.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  }
+
+  /* ---------- menu data ---------- */
+  var W1 = [
+    { d: 'Mon', n: '12', out: true, t: 'Lunch out', p: 'Nothing to cook today.' },
+    { d: 'Tue', n: '13', t: 'Mild Thai green curry on cauliflower-quinoa rice', p: 'Tofu, beans, zucchini and greens in coconut milk, hemp seeds on top, a side of yogurt and a big salad.', tag: 'Thai', pr: '45 / 30', low: 'Low spice: 1 tsp mild green paste, or blend fresh coriander and basil. No chilli.', fill: 'Rice bowl half cauliflower, half quinoa. 250 g tofu each.', rec: 'thai' },
+    { d: 'Wed', n: '14', t: 'Stuffed capsicum with rajma, paneer and quinoa', p: 'Three halves each, with yogurt-lime crema, an avocado dip and kachumber.', tag: 'Mexican', cls: 'mex', pr: '55 / 38', low: 'Low spice: cumin and oregano only. Chilli flakes on the side for Rushi.', fill: 'Add a bowl of salad with pumpkin seeds.', rec: 'capsicum' },
+    { d: 'Thu', n: '15', t: 'Tuver-lilva shaak, moong dal, two juwar rotli', p: 'Kachumber, chaas, and a sprouted moong salad on the side.', tag: 'Gujarati', cls: 'guj', pr: '50 / 36', low: 'Low spice: ginger and jeera tadka, hing in the dal, no red chilli. Frozen lilva or peas if fresh is not out.', fill: 'Two juwar rotli each, ghee on top, dal as a full bowl.' },
+    { d: 'Fri', n: '16', t: 'Veg bibimbap bowl with tempeh', p: 'Quinoa, seared tempeh, palak, carrot, beet, sprouts and sesame, with tahini-ginger dressing. Dipali loved this idea.', tag: 'Korean', pr: '53 / 35', low: 'Low spice: no gochujang. Sesame oil and ginger. Tofu or paneer if tempeh is not found.', fill: 'Add 100 g seared paneer or tofu on top.', rec: 'korean' },
+    { d: 'Sat', n: '17', out: true, t: 'Lunch out: Dipali\u2019s fun day', p: 'Nothing to cook. Soak the whole green moong tonight for Sunday\u2019s pesarattu.' },
+    { d: 'Sun', n: '18', t: 'Moong pesarattu with paneer, sambar and coconut chutney', p: 'Green moong dosa, naturally gluten-free, stuffed with paneer, with tuver sambar and a chickpea-cucumber salad.', tag: 'South Indian', pr: '52 / 38', low: 'Low spice: green chilli only in Rushi\u2019s chutney.', fill: 'Three or four pesarattu each with paneer stuffing, a full bowl of sambar and the chickpea salad.', rec: 'pesarattu' }
+  ];
+  var X1 = [
+    { tag: 'Mexican', cls: 'mex', t: 'Quinoa enchiladas', p: 'Your own recipe. Add a side of rajma and a big salad to keep it filling.', m: 'Protein about 48 / 34 g.' },
+    { tag: 'Chinese', t: 'Kung pao tofu with cashews', p: 'Your own recipe. Serve over a big bowl of cauliflower-quinoa rice with stir-fried greens.', m: 'Protein about 50 / 36 g.' },
+    { tag: 'Indian', cls: 'guj', t: 'Palak paneer with juwar rotli and chana salad', p: 'A comfort meal that is also filling. Two rotli each and a side of chickpea-cucumber salad.', m: 'Protein about 52 / 38 g.' }
+  ];
+  var L1 = [
+    ['Vegetables and greens', ['Capsicum, 6 large', 'Cauliflower, 1 large', 'Zucchini and French beans', 'Carrot and beet', 'Palak, 2 bunches', 'Cucumber, tomato, onion, cabbage for salads', 'Peas, tuver, lilva (frozen is fine)', 'Sprouts', 'Lemon, lime, ginger, garlic', 'Coriander, mint, basil, curry leaves', 'Avocado, if the price is fine']],
+    ['Grains and flours', ['Quinoa, 1 kg', 'Amaranth', 'Juwar flour', 'Whole green moong', 'Moong dal and tuver dal']],
+    ['Protein', ['Tofu, about 750 g', 'Tempeh, about 300 g (or extra tofu)', 'Paneer, about 800 g', 'Rajma, plain', 'Chickpeas for the salad', 'Hemp and pumpkin seeds', 'Cashews, sesame, tahini']],
+    ['Dairy and oils', ['Ghee', 'Olive oil and sesame oil', 'Thick yogurt, about 1 kg', 'Coconut milk, 2 cans, no gums', 'A little milk for tea']],
+    ['Pantry', ['Mild Thai green paste, or herbs to blend', 'Hing, jeera, mustard seeds', 'Cumin, oregano, kasuri methi', 'Tamarind, rock salt']]
+  ];
+
+  var W2 = [
+    { d: 'Mon', n: '19', t: 'Moong-dal pizza with paneer and vegetables', p: 'A pizza base made from soaked moong dal, with tomato-basil sauce, paneer, capsicum and mushrooms. Eat it with a big salad and tahini dressing.', tag: 'Italian', pr: '45 / 32', low: 'Low spice: oregano and basil, chilli flakes on the side.', fill: 'Three small pizzas each, a chickpea-cucumber salad and a handful of seeds.', rec: 'pizza' },
+    { d: 'Tue', n: '20', t: 'Korean tofu bulgogi bowl', p: 'Marinated seared tofu on quinoa with sesame spinach, quick carrot-cucumber pickle and tahini-ginger sauce. A second go at the Korean flavours Dipali loved.', tag: 'Korean', pr: '42 / 32', low: 'Low spice: ginger, garlic and sesame, no chilli paste.', fill: '250 g tofu each, a full bowl of quinoa, and a double portion of greens.', rec: 'bulgogi' },
+    { d: 'Wed', n: '21', t: 'Dal handvo with lauki, tuver-lilva shaak and yogurt', p: 'A baked savoury lentil cake with bottle gourd, made with quinoa in place of rice. Garlic chutney and a sprouted moong salad on the side. Start the batter Tuesday evening so it can ferment overnight.', tag: 'Gujarati', cls: 'guj', pr: '46 / 34', low: 'Low spice: ginger and green chilli only in the batter, garlic chutney on the side.', fill: 'Three slices each with a bowl of shaak, yogurt and the sprout salad.', rec: 'handvo' },
+    { d: 'Thu', n: '22', t: 'Rajma-walnut tacos in juwar tortillas', p: 'A walnut and rajma filling in homemade wheatless tortillas, with avocado-lime mash, cashew crema, kachumber and shredded cabbage. No lettuce cups needed.', tag: 'Mexican', cls: 'mex', pr: '48 / 34', low: 'Low spice: cumin, paprika and oregano.', fill: 'Three tacos each, a Mexican quinoa bowl on the side, and a salad.', rec: 'tacos' },
+    { d: 'Fri', n: '23', t: 'Brunch lunch: tofu scramble with moong-quinoa cheela', p: 'Turmeric tofu scramble with mushrooms, spinach and capsicum, savoury moong pancakes, avocado and roasted tomatoes.', tag: 'Brunch', pr: '48 / 36', low: 'Low spice: black salt, pepper and coriander.', fill: '250 g tofu each, three cheela, avocado half, and a handful of seeds.', rec: 'scramble' },
+    { d: 'Sat', n: '24', out: true, t: 'Lunch out: Dipali\u2019s fun day', p: 'Nothing to cook. Make the tortilla dough on Sunday morning for the kati rolls.' },
+    { d: 'Sun', n: '25', t: 'Paneer tikka kati rolls', p: 'Seared paneer tikka with onions and capsicum in juwar tortillas, with mint-yogurt chutney, onion and cabbage salad, and a chickpea chaat on the side. The last cooked lunch of the week.', tag: 'Street food', pr: '50 / 36', low: 'Low spice: mild kashmiri chilli, mint and lemon.', fill: 'Two or three rolls each plus the chickpea chaat bowl. Use up the vegetables.', rec: 'katiroll' }
+  ];
+  var X2 = [
+    { tag: 'Indian', cls: 'guj', t: 'Instant Pot dal makhani with paneer', p: 'Slow-cooked black urad and rajma in a creamy tomato gravy made with cashew paste, seared paneer cubes, over cauliflower-quinoa rice with a big kachumber.', m: 'Protein about 49 / 36 g. Mild.', rec: 'makhani' },
+    { tag: 'Thai', t: 'Pad Thai-style tofu with cabbage and sprouts', p: 'Tofu stir-fried with sprouted moong, cabbage ribbons, carrot and cashews in a tamarind-lime sauce. A bigger bowl, no noodles.', m: 'Protein about 46 / 34 g. Mild, tangy.' },
+    { tag: 'Chinese', t: 'Kung pao tofu with cauliflower-quinoa rice', p: 'Your own recipe. Add stir-fried greens and a bowl of edamame or peas.', m: 'Protein about 50 / 36 g.' }
+  ];
+  var L2 = [
+    ['Vegetables and greens', ['Palak, 3 bunches', 'Mushrooms, 500 g', 'Capsicum, 4', 'Tomatoes, 2 kg', 'Onion, cucumber, cabbage, carrot for salads and slaws', 'Lauki (bottle gourd), 1 medium', 'Tuver and lilva (frozen is fine)', 'Cauliflower, 1 large', 'Spring onion', 'Avocado, 3 if the price is fine', 'Ginger, garlic, green chilli, lemon, lime', 'Coriander, mint, basil, methi, curry leaves', 'Sprouted moong', 'Black olives, 1 small jar (pizza, no added sugar)']],
+    ['Grains and flours', ['Yellow moong dal, 1 kg', 'Tuver dal, chana dal, whole green moong', 'Rajma (tacos), and whole black urad if you pick the dal makhani swap', 'Quinoa, 1 kg (also grind some into flour at home)', 'Juwar flour, 500 g', 'Psyllium husk (isabgol)']],
+    ['Protein', ['Tofu, extra firm, about 1 kg', 'Paneer, about 1 kg', 'Walnuts, 150 g', 'Cashews, 300 g', 'Chickpeas, boiled', 'Hemp and pumpkin seeds', 'Sesame seeds and tahini']],
+    ['Dairy and oils', ['Ghee', 'Olive oil and sesame oil', 'Thick yogurt, about 1.5 kg', 'A little milk for tea']],
+    ['Pantry', ['Black salt (kala namak)', 'Chaat masala (kati rolls)', 'Kasuri methi', 'Cumin, oregano, paprika', 'Kashmiri chilli, coriander powder, turmeric', 'Hing, mustard seeds', 'Tamarind', 'Gluten-free tamari or coconut aminos, if you can find it', 'Eno or baking soda']]
+  ];
+
+
+  var W3 = [
+    { d: 'Mon', n: '2', t: 'Easy khichdi with yogurt', p: 'Moong dal khichdi cooked soft with ghee, a big bowl of thick yogurt, cucumber-onion salad and sauteed greens. Simple, and the groceries are minimal.', tag: 'Gujarati', cls: 'guj', pr: '40 / 30', low: 'Low spice: jeera, ginger and hing only.', fill: 'Use 2 parts moong dal to 1 part rice or quinoa-amaranth. Add 100 g seared paneer or tofu on the side if you are hungry.' },
+    { d: 'Tue', n: '3', t: 'Paneer-tofu fajita bowl', p: 'Seared paneer, tofu, capsicum and onions with rajma, guacamole, cashew crema and kachumber, over cauliflower-quinoa rice.', tag: 'Mexican', cls: 'mex', pr: '55 / 40', low: 'Low spice: cumin, paprika and oregano, chilli flakes on the side.', fill: 'A full bowl of rice base plus both proteins, a half avocado, and the juwar tortillas if you have dough left.', rec: 'fajita' },
+    { d: 'Wed', n: '4', t: 'Tofu shakshuka with hummus and quinoa tabbouleh', p: 'Soft tofu simmered in a spiced tomato and pepper sauce, served with homemade hummus, quinoa tabbouleh and tzatziki.', tag: 'Mediterranean', pr: '48 / 36', low: 'Low spice: paprika and cumin, no chilli.', fill: 'Add baked falafel on the side if you like, and a handful of seeds on the tabbouleh.', rec: 'shakshuka' },
+    { d: 'Thu', n: '5', t: 'Winter undhiyu-style vegetables, juwar muthiya and moong dal', p: 'Seasonal winter vegetables in the Gujarati style, steamed juwar-lauki muthiya, a bowl of moong dal and chaas. If surti papdi is not in the market, make tuver-lilva shaak instead.', tag: 'Gujarati', cls: 'guj', pr: '48 / 34', low: 'Low spice: ginger and green chilli only, a little coconut and coriander.', fill: 'Four or five muthiya each, dal as a full bowl, and a sprouted moong salad.', rec: 'muthiya' },
+    { d: 'Fri', n: '6', t: 'Tofu teriyaki bowl with broccoli and mushrooms', p: 'Sticky ginger-garlic tofu with broccoli, mushrooms and sesame over quinoa, with a cucumber and carrot pickle.', tag: 'Japanese', pr: '45 / 33', low: 'Low spice: ginger and garlic, no chilli.', fill: '250 g tofu each, a full bowl of quinoa and an extra tray of roasted vegetables.', rec: 'teriyaki' },
+    { d: 'Sat', n: '7', out: true, t: 'Lunch out: Dipali\u2019s fun day', p: 'Nothing to cook.' },
+    { d: 'Sun', n: '8', t: 'Instant Pot paneer lababdar with juwar rotli', p: 'Paneer in a creamy cashew-tomato gravy, with two juwar rotli, a big kachumber and a bowl of chana salad.', tag: 'Indian', pr: '55 / 40', low: 'Low spice: mild kashmiri chilli, kasuri methi and ginger.', fill: '150 g paneer each, two rotli, and a full chickpea salad.' }
+  ];
+  var X3 = [
+    { tag: 'Italian', t: 'Zucchini lasagna with cashew white sauce', p: 'Your own recipe. Add a big salad and a bowl of white bean soup to keep it filling.', m: 'Protein about 46 / 34 g.' },
+    { tag: 'Indian', cls: 'guj', t: 'Palak paneer with juwar rotli and chana salad', p: 'A comfort meal. Two rotli each, a chickpea-cucumber salad on the side.', m: 'Protein about 52 / 38 g.' },
+    { tag: 'Mexican', cls: 'mex', t: 'Quinoa enchiladas with a rajma side', p: 'Your own recipe, made fuller with rajma and a big salad.', m: 'Protein about 48 / 34 g.' }
+  ];
+  var L3 = [
+    ['For Monday 2 Nov (order delivery for that morning)', ['Moong dal and rice or quinoa-amaranth (you may have these already)', 'Thick yogurt, 1 kg', 'Cucumber, onion, palak', 'Ghee']],
+    ['Vegetables and greens', ['Capsicum, 4', 'Mushrooms, 500 g', 'Broccoli, 2 heads', 'Tomatoes, 2 kg', 'Cauliflower, 1 large', 'Cucumber, carrot, cabbage for salads', 'Lauki, 1 medium', 'Winter vegetables for undhiyu: surti papdi, tuver, lilva, raw banana, brinjal, sweet potato (as available)', 'Avocado, 3 if the price is fine', 'Ginger, garlic, green chilli, lemon, lime', 'Coriander, mint, methi, curry leaves']],
+    ['Grains and flours', ['Quinoa, 1 kg', 'Juwar flour, 500 g', 'Moong dal and tuver dal', 'Boiled chickpeas', 'Rajma']],
+    ['Protein', ['Tofu, about 1 kg', 'Paneer, about 1 kg', 'Cashews, 300 g', 'Sesame seeds, tahini, hemp seeds']],
+    ['Dairy and oils', ['Ghee', 'Olive oil and sesame oil', 'Thick yogurt, 1.5 kg']],
+    ['Pantry', ['Paprika, cumin, oregano', 'Kashmiri chilli, kasuri methi', 'Gluten-free tamari or coconut aminos, if you can find it', 'Arrowroot or cornflour (a spoon, to thicken the teriyaki)', 'Monk fruit sweetener']]
+  ];
+
+  /* ---------- recipes (new dishes only; serves 2) ---------- */
+  var R = [
+    { id: 'tortilla', t: 'Wheatless juwar tortillas (start here)', n: 'A starting point to test with one tortilla first. Used for tacos and kati rolls.', i: ['1 cup juwar flour', '1/4 cup quinoa flour (grind cooked-dry quinoa in the mixer and sieve)', '1 tbsp psyllium husk (isabgol)', '1/2 tsp salt', '1 tbsp olive oil', 'About 3/4 cup hot (not boiling) water'], s: ['Mix the dry ingredients, then the oil, then add hot water slowly while stirring.', 'Rest 10 minutes. The psyllium thickens the dough and makes it bend instead of crack.', 'Knead until smooth. If it cracks, add a spoon of water; if sticky, a spoon of juwar flour.', 'Make 6 balls. Roll each between two sheets of baking paper or a cut plastic bag to about 6 inches.', 'Cook on a hot tawa 40 seconds a side until spots appear. Keep wrapped in a clean cloth so they stay soft.'] },
+    { id: 'pizza', t: 'Moong-dal pizza base and pizza', n: 'Pudla-style base, no flour needed.', i: ['1 cup yellow moong dal, soaked 3 to 4 hours', '1/3 cup water, ginger, 1 green chilli (optional), 1/2 tsp ajwain, salt, 1 tsp olive oil', 'Sauce: 3 tomatoes, 2 garlic, basil, oregano, olive oil', 'Toppings: crumbled paneer, capsicum, mushrooms, olives'], s: ['Blend the dal with the water, ginger, chilli, ajwain and salt into a thick pourable batter, like pancake batter.', 'Heat a tawa with ghee. Spread 2 ladles into a 6-inch round. Cover and cook 3 minutes, flip, cook 2 more until firm. Makes about 6.', 'Cook the sauce: sauté garlic, add chopped tomato, basil, oregano and salt for 8 minutes, mash.', 'Spread the sauce on the bases, add paneer and vegetables, drizzle olive oil.', 'Cover on the tawa for 4 minutes, or bake at 200 °C for 8 minutes.'] },
+    { id: 'bulgogi', t: 'Korean tofu bulgogi bowl', n: 'The same bowl idea as the bibimbap, with a marinated tofu.', i: ['250 g extra-firm tofu, pressed and sliced', 'Marinade: 1 tbsp sesame oil, 1 tbsp gluten-free tamari or coconut aminos (or lemon and salt), 1 tsp grated ginger, 2 garlic cloves, pepper, a pinch of monk fruit', 'Sesame spinach: 2 bunches palak, sesame oil, garlic, sesame seeds', 'Pickle: carrot and cucumber with lemon and salt', 'Tahini-ginger sauce: 2 tbsp tahini, ginger, lemon, water', 'Quinoa, cooked'], s: ['Marinate the tofu 20 minutes.', 'Sear in ghee or olive oil 3 to 4 minutes a side until golden.', 'Blanch the palak 1 minute, squeeze dry, toss with sesame oil, garlic and seeds.', 'Mix the pickle and the sauce.', 'Build the bowl: quinoa, tofu, spinach, pickle, sprouts, sauce.'] },
+    { id: 'handvo', t: 'Dal handvo with lauki', n: 'A baked, high-protein Gujarati lentil cake, made with quinoa in place of rice.', i: ['1/2 cup each tuver dal, chana dal and moong dal, plus 1/4 cup quinoa', '1/2 cup yogurt, ginger, garlic, 1 green chilli', '2 cups grated lauki, chopped methi or coriander', 'Turmeric, hing, salt, 1/2 tsp Eno or baking soda', 'Tadka: ghee, mustard seeds, sesame seeds, curry leaves'], s: ['Soak the dals and quinoa 4 hours. Grind coarsely with the yogurt, ginger, garlic and chilli. Ferment overnight (6 to 8 hours).', 'Mix in the lauki, greens, turmeric, hing and salt. Add Eno just before cooking.', 'Heat ghee, splutter mustard, sesame and curry leaves, then pour half in the pan and mix the rest into the batter.', 'Pour into a greased pan. Bake at 200 °C for 40 minutes, or cook covered on low heat, 20 minutes a side.', 'Serve with garlic chutney, yogurt and a sprouted moong salad.'] },
+    { id: 'tacos', t: 'Rajma-walnut tacos', n: 'Fill the juwar tortillas from the tortilla recipe.', i: ['1 cup cooked rajma, 1/2 cup walnuts pulsed coarsely', '1 onion, 2 garlic, 2 tomatoes', '1 tsp cumin, 1/2 tsp paprika, 1 tsp oregano, salt, lime', 'Avocado-lime mash; cashew crema (soaked cashews, lime, salt, water, blended); kachumber; shredded cabbage'], s: ['Sauté onion and garlic in olive oil, add tomatoes and the spices for 5 minutes.', 'Add the rajma, lightly mashed, and the walnuts. Cook 5 more minutes. Finish with lime and coriander.', 'Warm the tortillas. Fill with the mix, mash, crema, kachumber and cabbage.'] },
+    { id: 'scramble', t: 'Tofu scramble and moong-quinoa cheela', n: 'A brunch-style plate.', i: ['250 g extra-firm tofu, crumbled', 'Onion, garlic, mushrooms, capsicum, a handful of palak', '1/2 tsp turmeric, pinch of black salt (kala namak gives an egg-like flavour), pepper, cumin', 'Cheela: 3/4 cup soaked yellow moong dal, 1/4 cup cooked quinoa, ginger, chilli, turmeric, salt, water'], s: ['Sauté the onion, garlic, mushrooms and capsicum in olive oil or ghee. Add the palak.', 'Add turmeric and cumin, then the crumbled tofu. Cook 6 to 8 minutes. Finish with black salt, pepper, coriander and lemon.', 'Blend the cheela ingredients with water to a thin batter. Pour onto a ghee tawa, spread thin, cook 2 minutes a side. Stuff with crumbled paneer if you like.', 'Serve with half an avocado and roasted tomatoes.'] },
+    { id: 'katiroll', t: 'Paneer tikka kati roll', n: 'Roll in the juwar tortillas.', i: ['200 g paneer cubes, 1 capsicum, 1 onion', 'Marinade: 1/2 cup thick yogurt, ginger-garlic paste, 1 tsp kasuri methi, 1 tsp coriander powder, 1/2 tsp turmeric, mild Kashmiri chilli, lemon, 1 tsp olive oil', 'Mint chutney: mint, coriander, lemon, ginger, a spoon of yogurt', 'Sliced onion, cabbage, chaat masala'], s: ['Marinate the paneer and vegetables 30 minutes.', 'Sear in a hot pan or bake at 220 °C for 12 minutes.', 'Spread chutney on a tortilla, add the tikka, onion, cabbage and chaat masala, and roll tightly.', 'Make a quick chickpea chaat on the side with cucumber, tomato and lemon.'] },
+    { id: 'makhani', t: 'Instant Pot dal makhani', n: 'Rich and filling, with cashew paste in place of cream.', i: ['1/2 cup whole black urad and 1/4 cup rajma, soaked overnight', '1 onion, 3 pureed tomatoes, ginger, garlic', '1 tsp cumin, 1 tsp coriander, mild chilli, 1 tsp kasuri methi', '2 tbsp cashew paste, 1 tbsp ghee, salt', 'Seared paneer cubes'], s: ['Pressure cook the urad and rajma with 3 cups water for 35 minutes.', 'Sauté onion, ginger and garlic in ghee. Add the tomato puree and spices, cook until the oil separates.', 'Add the cooked lentils and simmer 15 minutes. Mash a few against the side.', 'Stir in the cashew paste and kasuri methi. Add the paneer. Serve over cauliflower-quinoa rice.'] },
+    { id: 'fajita', t: 'Paneer-tofu fajita bowl', n: 'Quick and fuller than it looks.', i: ['150 g paneer and 200 g tofu in strips', 'Capsicum and onion, sliced', '1 tsp cumin, 1 tsp paprika, 1 tsp oregano, salt, lime', 'Rajma (cooked), guacamole, cashew crema, kachumber', 'Cauliflower-quinoa rice'], s: ['Toss the paneer, tofu and spices with a spoon of olive oil. Sear in a hot pan until golden, then set aside.', 'Sear the capsicum and onion 4 minutes.', 'Warm the rajma with a pinch of cumin.', 'Build the bowl: rice, rajma, paneer and tofu, vegetables, guacamole and crema.'] },
+    { id: 'shakshuka', t: 'Tofu shakshuka', n: 'Mediterranean breakfast-for-lunch, no egg.', i: ['250 g soft or firm tofu, in large chunks', '1 onion, 1 capsicum, 3 garlic, 4 tomatoes', '1 tsp paprika, 1 tsp cumin, salt, pinch of black salt', 'Hummus, quinoa tabbouleh (quinoa, parsley, tomato, cucumber, lemon, olive oil), tzatziki'], s: ['Sauté onion, capsicum and garlic in olive oil. Add tomatoes and spices and cook 10 minutes into a thick sauce.', 'Press the tofu chunks into the sauce, cover and simmer 8 minutes.', 'Finish with black salt, coriander and olive oil.', 'Serve with the hummus, tabbouleh and tzatziki.'] },
+    { id: 'muthiya', t: 'Juwar-lauki muthiya', n: 'Steamed Gujarati dumplings, gluten-free with juwar.', i: ['1 cup juwar flour, 1/2 cup besan', '1 cup grated lauki, chopped methi or coriander', 'Ginger, green chilli, turmeric, salt, 1 tsp olive oil, 1 tsp lemon', 'Tadka: ghee, mustard, sesame, curry leaves'], s: ['Mix everything into a soft dough. Do not add water, the lauki gives enough.', 'Shape into rolls and steam for 15 minutes. Cool, then slice.', 'Heat ghee, splutter mustard, sesame and curry leaves, and toss the slices until crisp.', 'Serve with moong dal and the winter vegetables.'] },
+    { id: 'teriyaki', t: 'Tofu teriyaki bowl', n: 'Sticky ginger-garlic tofu, no sugar.', i: ['250 g extra-firm tofu, cubed', 'Sauce: 2 tbsp gluten-free tamari or coconut aminos, 1 tbsp sesame oil, ginger, garlic, 1 tsp monk fruit, 1 tsp arrowroot in a little water', 'Broccoli, mushrooms, sesame seeds', 'Quinoa'], s: ['Sear the tofu in olive oil until golden.', 'Add the broccoli and mushrooms and cook 4 minutes.', 'Pour in the sauce and stir until it thickens and coats everything, 1 to 2 minutes.', 'Serve over quinoa with sesame seeds and a quick cucumber-carrot pickle.'] },
+    { id: 'thai', t: 'Mild Thai green curry', n: 'This week, Tuesday.', i: ['250 g tofu, beans, zucchini, a handful of greens', '1 can coconut milk, 1 tsp mild green paste (or blend coriander, basil, ginger, garlic, lime)', 'Cauliflower-quinoa rice'], s: ['Sauté the paste in a little ghee for a minute.', 'Add coconut milk and vegetables, simmer 8 minutes. Add the tofu cubes for the last 4.', 'Finish with basil and lime. Serve over the rice with hemp seeds.'] },
+    { id: 'capsicum', t: 'Stuffed capsicum with rajma, paneer and quinoa', n: 'This week, Wednesday.', i: ['6 capsicum halves', '1 cup cooked rajma, 1 cup cooked quinoa, 100 g crumbled paneer', 'Onion, tomato, cumin, oregano, salt', 'Yogurt-lime crema'], s: ['Sauté onion and tomato with the spices, mix in the rajma, quinoa and paneer.', 'Stuff the halves. Bake at 200 °C for 20 minutes, or cook covered in a pan.', 'Serve with crema, avocado dip and kachumber.'] },
+    { id: 'korean', t: 'Veg bibimbap bowl', n: 'This week, Friday. Same method as the bulgogi bowl.', i: ['Quinoa, seared tempeh (or tofu or paneer), sesame spinach, carrot, beet, sprouts, sesame', 'Tahini-ginger dressing'], s: ['Cook the quinoa. Sear the tempeh with a little sesame oil and ginger.', 'Make the sesame spinach as in the bulgogi recipe. Shred the carrot and beet raw or lightly sautéed.', 'Arrange everything on the quinoa. Drizzle the dressing.'] },
+    { id: 'pesarattu', t: 'Moong pesarattu with sambar', n: 'This week, Saturday.', i: ['1 cup whole green moong, soaked overnight', 'Ginger, green chilli, jeera, salt', 'Crumbled paneer with onion for stuffing', 'Tuver sambar, coconut chutney'], s: ['Blend the moong with ginger, chilli, jeera and a little water to a pourable batter.', 'Spread thinly on a ghee tawa, scatter paneer and onion, cook 2 minutes a side.', 'Serve with sambar and chutney.'] }
+  ];
+
+  /* ---------- rendering ---------- */
+  function dayEl(x) {
+    var body = h('div', null, [h('h3', { text: x.t }), h('p', { text: x.p })]);
+    if (!x.out) {
+      body.appendChild(h('div', { class: 'tags' }, [h('span', { class: 'tag' + (x.cls ? ' ' + x.cls : ''), text: x.tag }), h('span', { class: 'meta', text: 'About ' + x.pr + ' g protein' })]));
+      body.appendChild(h('p', { class: 'meta', style: 'margin-top:8px', text: x.low }));
+      body.appendChild(h('div', { class: 'fill' }, [h('b', { text: 'To make it filling: ' }), x.fill]));
+      if (x.rec) {
+        var a = h('a', { role: 'button', tabindex: '0', text: 'See the recipe' });
+        a.addEventListener('click', function () { openRecipe(x.rec); });
+        a.addEventListener('keydown', function (e) { if (e.key === 'Enter') openRecipe(x.rec); });
+        body.appendChild(h('div', { class: 'link' }, [a]));
+      }
+    }
+    return h('article', { class: 'day' + (x.out ? ' out' : '') }, [h('div', { class: 'date' }, [h('span', { text: x.d }), h('b', { text: x.n })]), body]);
+  }
+  function recLink(id) {
+    var a = h('a', { role: 'button', tabindex: '0', text: 'See the recipe' });
+    a.addEventListener('click', function () { openRecipe(id); });
+    a.addEventListener('keydown', function (e) { if (e.key === 'Enter') openRecipe(id); });
+    return h('div', { class: 'link' }, [a]);
+  }
+  function swapEl(x) {
+    return h('div', { class: 'swap' }, [h('span', { class: 'tag' + (x.cls ? ' ' + x.cls : ''), style: 'align-self:flex-start', text: x.tag }), h('h3', { text: x.t }), h('p', { text: x.p }), h('span', { class: 'meta', text: x.m })].concat(x.rec ? [recLink(x.rec)] : []));
+  }
+  /* where to buy: links built from the item name, shown only when switched on */
+  function buyEl(item, group) {
+    var q = item.split(/[,(]/)[0].replace(/\s+/g, ' ').trim();
+    var fresh = /Vegetables|Dairy|Protein/.test(group);
+    var qq = encodeURIComponent(q + (fresh ? ' organic' : ''));
+    var d = h('div', { class: 'buy' });
+    [['BigBasket', 'https://www.bigbasket.com/ps/?q=' + qq], ['Blinkit', 'https://blinkit.com/s/?q=' + qq], ['Amazon', 'https://www.amazon.in/s?k=' + qq]].forEach(function (x) {
+      d.appendChild(h('a', { href: x[1], target: '_blank', rel: 'noopener', text: x[0] }));
+    });
+    return d;
+  }
+  var GU = [['capsicum','સિમલા મરચાં'],['cauliflower','ફૂલકોબી'],['zucchini','ઝુકીની'],['french beans','ફણસી'],['carrot','ગાજર'],['beet','બીટ'],['palak','પાલક'],['cucumber','કાકડી'],['tomato','ટામેટાં'],['onion','ડુંગળી'],['cabbage','કોબી'],['peas','વટાણા'],['tuver','તુવેર'],['lilva','લીલવા'],['sprout','ફણગાવેલા કઠોળ'],['lemon','લીંબુ'],['lime','લીંબુ'],['ginger','આદુ'],['garlic','લસણ'],['coriander','કોથમીર'],['mint','ફુદીનો'],['basil','તુલસી/બેસિલ'],['curry leaves','મીઠો લીમડો'],['avocado','એવોકાડો'],['lauki','દૂધી'],['mushroom','મશરૂમ'],['broccoli','બ્રોકલી'],['methi','મેથી'],['spring onion','લીલી ડુંગળી']];
+  /* vendor list: one row per vegetable, grams editable. Gujarati copied, English for reading only */
+  function vendorItems(groups) {
+    var out = [], seen = {};
+    groups.forEach(function (g) {
+      if (!/Vegetables/.test(g[0])) return;
+      g[1].forEach(function (it) {
+        var low = it.toLowerCase().replace(/spring onion/g, 'springonion');
+        var hits = [];
+        GU.forEach(function (p) {
+          var k = p[0] === 'spring onion' ? 'springonion' : p[0];
+          if (low.indexOf(k) > -1 && !seen[p[1]]) { seen[p[1]] = 1; hits.push(p); }
+        });
+        hits.forEach(function (p) {
+          var g0 = /coriander|mint|basil|curry|methi|ginger|garlic|lemon|lime/.test(p[0]) ? 100 : /palak|spring/.test(p[0]) ? 250 : 500;
+          var m = hits.length === 1 && it.match(/(\d+(?:\.\d+)?)\s*(kg|g)\b/i);
+          if (m) g0 = Math.round(parseFloat(m[1]) * (/kg/i.test(m[2]) ? 1000 : 1));
+          var pc = /avocado|cauliflower|lauki|broccoli|lemon|lime|capsicum/.test(p[0]);
+          var c = hits.length === 1 && !m && it.match(/,\s*(\d+)\b/);
+          out.push({ gu: p[1], en: p[0].replace(/^./, function (c2) { return c2.toUpperCase(); }), u: pc ? 'n' : 'g', g: pc ? (c ? parseInt(c[1], 10) : (/lemon|lime/.test(p[0]) ? 6 : 1)) : g0, on: true });
+        });
+      });
+    });
+    return out;
+  }
+  function toolsEl(grid, groups) {
+    var wrapEl = h('div');
+    var on = h('button', { type: 'button', text: 'Show where to buy' });
+    on.addEventListener('click', function () {
+      var s = grid.classList.toggle('buyon');
+      on.textContent = s ? 'Hide where to buy' : 'Show where to buy';
+    });
+    var tools = h('div', { class: 'shoptools' }, [on]);
+    var items = vendorItems(groups);
+    var UK = 'vendor-units';
+    var savedU = {}; try { savedU = JSON.parse(localStorage.getItem(UK) || '{}'); } catch (e) {}
+    items.forEach(function (r) { if (savedU[r.en] && savedU[r.en] !== r.u) { r.u = savedU[r.en]; r.g = r.u === 'n' ? 1 : 500; } });
+    var card = h('details', { class: 'vendor' });
+    card.appendChild(h('summary', { text: 'Message for local vegetable vendor (Gujarati)' }));
+    var rows = h('div');
+    var guPre = h('pre', { class: 'vmsg' });
+    var enPre = h('pre', { class: 'vmsg' });
+    function gtxt(r) { return r.gu + ' – ' + r.g + (r.u === 'n' ? ' નંગ' : ' ગ્રામ'); }
+    function etxt(r) { return r.en + ' – ' + r.g + (r.u === 'n' ? (r.g === 1 ? ' piece' : ' pieces') : ' g'); }
+    function refresh() {
+      var on_ = items.filter(function (r) { return r.on && r.g > 0; });
+      guPre.textContent = 'નમસ્તે ભાઈ, આ અઠવાડિયા માટે નીચેનું શાકભાજી જોઈએ છે. કૃપા કરીને તાજું અને જંતુનાશક વગરનું (ઓર્ગેનિક હોય તો સારું) આપશો:\n' + on_.map(function (r) { return '- ' + gtxt(r); }).join('\n') + '\nઆભાર.';
+      enPre.textContent = 'Hello brother, I need the vegetables below for this week. Please give fresh, pesticide-free ones (organic if possible):\n' + on_.map(function (r) { return '- ' + etxt(r); }).join('\n') + '\nThank you.';
+    }
+    items.forEach(function (r) {
+      var cb = h('input', { type: 'checkbox' }); cb.checked = true;
+      cb.addEventListener('change', function () { r.on = cb.checked; refresh(); });
+      var num = h('input', { type: 'number', min: '0', step: r.u === 'n' ? '1' : '50', value: String(r.g), 'aria-label': r.en + ' amount' });
+      num.className = 'gnum';
+      num.addEventListener('input', function () { r.g = parseInt(num.value, 10) || 0; refresh(); });
+      var sel = h('select', { 'aria-label': r.en + ' unit' }, [h('option', { value: 'g', text: 'grams' }), h('option', { value: 'n', text: 'pieces' })]);
+      sel.value = r.u;
+      sel.addEventListener('change', function () { r.u = sel.value; savedU[r.en] = r.u; try { localStorage.setItem(UK, JSON.stringify(savedU)); } catch (e) {} num.step = r.u === 'n' ? '1' : '50'; refresh(); });
+      rows.appendChild(h('div', { class: 'vrow' }, [cb, h('span', { class: 'vn', text: r.gu + '  (' + r.en + ')' }), num, sel]));
+    });
+    var cp = h('button', { type: 'button', text: 'Copy Gujarati message' });
+    cp.addEventListener('click', function () { try { navigator.clipboard.writeText(guPre.textContent); cp.textContent = 'Copied'; setTimeout(function () { cp.textContent = 'Copy Gujarati message'; }, 1500); } catch (e) {} });
+    refresh();
+    card.appendChild(h('div', { class: 'body' }, [
+      h('p', { text: 'Untick what you do not need. Change the number, and switch between grams and pieces if you like (1000 g = 1 kg). Then copy and paste into WhatsApp.' }),
+      rows, h('p', { text: 'Gujarati message (this is what gets copied):' }), guPre, cp,
+      h('div', { class: 'envend' }, [h('p', { text: 'Same message in English, for you to read (not copied):' }), enPre])
+    ]));
+    wrapEl.appendChild(tools);
+    wrapEl.appendChild(card);
+    return wrapEl;
+  }
+  function listEl(groups, key) {
+    var saved = {}; try { saved = JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) {}
+    var grid = h('div', { class: 'grid' });
+    var n = 0;
+    groups.forEach(function (g) {
+      var ul = h('ul');
+      g[1].forEach(function (item) {
+        var id = key + '-' + (n++);
+        var box = h('input', { type: 'checkbox', id: id });
+        box.checked = !!saved[id];
+        box.addEventListener('change', function () { saved[id] = box.checked; try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) {} });
+        ul.appendChild(h('li', null, [h('label', { for: id }, [box, h('span', { text: item })]), buyEl(item, g[0])]));
+      });
+      grid.appendChild(h('div', { class: 'group' }, [h('h3', { text: g[0] }), ul]));
+    });
+    var box2 = h('div', { class: 'shoplist' }, [toolsEl(grid, groups), grid]);
+    return box2;
+  }
+  function week(panel, kicker, title, sub, days, extras, lists, key) {
+    panel.appendChild(h('div', null, [h('div', { class: 'kicker', text: kicker }), h('h2', { text: title }), h('p', { class: 'sub', text: sub }), h('div', { class: 'days' }, days.map(dayEl))]));
+    panel.appendChild(h('div', null, [h('h2', { text: 'Three extras to pick from' }), h('p', { class: 'sub', text: 'Swap any of these in for a day you want something different. All are filling.' }), h('div', { class: 'swaps' }, extras.map(swapEl))]));
+    panel.appendChild(h('div', null, [h('h2', { text: 'Shopping list' }), h('p', { class: 'sub', text: 'Tap to tick off. Choose organic or pesticide-free where you can. Check jars and cans: no added sugar, no seed oils, no gums in the coconut milk.' }), listEl(lists, key)]));
+  }
+  week(document.getElementById('p-w1'), 'Monday 12 to Sunday 18 October', 'This week', 'Protein shown as Rushi / Dipali for the plate.', W1, X1, L1, 'dm-w1');
+  week(document.getElementById('p-w3'), 'Monday 2 to Sunday 8 November', 'Week of 2 November', 'Starts with an easy khichdi. Groceries can be ordered ahead.', W3, X3, L3, 'dm-w3');
+  week(document.getElementById('p-w2'), 'Monday 19 to Sunday 25 October', 'Next week', 'Pizza, brunch and kati rolls are in. Wheatless tortillas get their first try on Thursday. The menu pauses from 26 October and starts again on Monday 2 November.', W2, X2, L2, 'dm-w2');
+
+  var rec = document.getElementById('p-rec');
+  rec.appendChild(h('div', null, [h('h2', { text: 'Recipes for the new dishes' }), h('p', { class: 'sub', text: 'Quantities are for two. Dishes you already make are not listed. These are starting points, so taste and adjust.' })]));
+  var list = h('div', { class: 'rec' });
+  R.forEach(function (r) {
+    var d = h('details', { id: 'r-' + r.id });
+    d.appendChild(h('summary', { text: r.t }));
+    var b = h('div', { class: 'body' }, [h('p', { text: r.n }), h('h4', { text: 'You need' }), h('ul', null, r.i.map(function (x) { return h('li', { text: x }); })), h('h4', { text: 'Method' }), h('ol', null, r.s.map(function (x) { return h('li', { text: x }); }))]);
+    d.appendChild(b);
+    list.appendChild(d);
+  });
+  rec.appendChild(list);
+
+  /* ---------- tabs ---------- */
+  var ids = ['w1', 'w2', 'w3', 'rec'];
+  function show(id) {
+    ids.forEach(function (k) {
+      document.getElementById('p-' + k).hidden = (k !== id);
+      document.getElementById('t-' + k).setAttribute('aria-selected', k === id ? 'true' : 'false');
+    });
+  }
+  ids.forEach(function (k) { document.getElementById('t-' + k).addEventListener('click', function () { show(k); }); });
+  var pb = document.getElementById('printbtn');
+  pb.addEventListener('click', function () {
+    var els = document.querySelectorAll('#p-rec details'); var prev = [];
+    els.forEach(function (d) { prev.push(d.open); d.open = true; });
+    try { window.print(); } catch (e) { alert('Printing is blocked here. Open this page in your browser and press Cmd+P (or Ctrl+P).'); }
+    els.forEach(function (d, i) { d.open = prev[i]; });
+  });
+})();
+</script>
+
+</body></html>
