@@ -105,16 +105,18 @@ details .body p{margin:0;color:var(--muted)}
 
   <div class="tabs" role="tablist" aria-label="Menu sections">
     <button role="tab" id="t-w1" aria-selected="true" aria-controls="p-w1">This week 2 to 8 Nov</button>
+    <button role="tab" id="t-w2" aria-selected="false" aria-controls="p-w2">Next week 9 to 15 Nov</button>
     <button role="tab" id="t-rec" aria-selected="false" aria-controls="p-rec">Recipes</button>
     <button type="button" class="printbtn" id="printbtn" title="Prints the tab you are looking at. Choose Save as PDF in the print window.">Print or save as PDF</button>
   </div>
 
   <section class="panel" id="p-w1" role="tabpanel" aria-labelledby="t-w1"></section>
+  <section class="panel" id="p-w2" role="tabpanel" aria-labelledby="t-w2" hidden></section>
   <section class="panel" id="p-rec" role="tabpanel" aria-labelledby="t-rec" hidden></section>
 
   <section class="note">
     <h2>How the week works</h2>
-    <p>Menus run Monday to Sunday and arrive by Friday night for the following week, so you can order on the weekend. One weekend day is lunch out. This menu covers Monday 2 to Sunday 8 November.</p>
+    <p>Menus run Monday to Sunday and arrive by Friday night for the following week, so you can order on the weekend. One weekend day is lunch out. The two tabs cover Monday 2 to Sunday 8 November and Monday 9 to Sunday 15 November.</p>
     <h2 style="margin-top:14px">Good to know</h2>
     <p>Every plate is built to be filling. New dishes have a recipe in the Recipes tab; dishes you already make do not.</p>
     <p class="fine" style="margin-top:10px">Protein is a rough estimate for Rushi / Dipali. A plan for the week, not a rule.</p>
@@ -150,6 +152,34 @@ details .body p{margin:0;color:var(--muted)}
     { tag: 'Indian', cls: 'guj', t: 'Palak paneer with juwar rotli and chana salad', p: 'A comfort meal. Two rotli each, a chickpea-cucumber salad on the side.', m: 'Protein about 52 / 38 g.' },
     { tag: 'Mexican', cls: 'mex', t: 'Quinoa enchiladas with a rajma side', p: 'Your own recipe, made fuller with rajma and a big salad.', m: 'Protein about 48 / 34 g.' }
   ];
+
+  var W2 = [
+    { d: 'Mon', n: '9', t: 'Palak moong dal bowl with seared paneer', p: 'A gentle, warm Instant Pot bowl after the festival days: creamy moong dal with spinach, ghee-jeera tadka, seared paneer, quinoa and a beet-carrot salad.', tag: 'Indian', pr: '50 / 38', low: 'Low spice: jeera, ginger and hing, no chilli in the pot.', fill: '150 g paneer each, a full bowl of dal over quinoa, and a big beet-carrot-cucumber salad with pumpkin seeds.' },
+    { d: 'Tue', n: '10', t: 'New Year thali: kadhi, vegetable khichdi, lilva-tuver shaak', p: 'A festive Gujarati plate: thin buttermilk kadhi, ghee-rich moong dal and vegetable khichdi, lilva-tuver shaak, kachumber and a few cubes of seared paneer. A small spoon of monk-fruit shrikhand is optional.', tag: 'Gujarati', cls: 'guj', pr: '46 / 34', low: 'Low spice: ginger, jeera, hing and a little green chilli.', fill: 'Dal-heavy khichdi (2 parts moong to 1 part rice or quinoa-amaranth), a full bowl of kadhi and the paneer on the side.' },
+    { d: 'Wed', n: '11', t: 'Mild Thai red curry with tofu, pumpkin and cauliflower rice', p: 'Coconut curry with tofu, red pumpkin, beans and mushrooms over cauliflower rice, with a crunchy cabbage-carrot-peanut salad.', tag: 'Thai', pr: '46 / 34', low: 'Low spice: a small spoon of red curry paste, ginger and lime, extra chilli on the side.', fill: '250 g tofu each, a mix of cauliflower rice and quinoa, and peanuts on the salad.', rec: 'thai' },
+    { d: 'Thu', n: '12', t: 'Cauliflower-walnut tacos with rajma in juwar tortillas', p: 'Spiced roasted cauliflower and walnut filling, warm rajma, cashew crema and kachumber, folded into juwar tortillas. A taco night for Dipali.', tag: 'Mexican', cls: 'mex', pr: '50 / 38', low: 'Low spice: cumin, paprika and oregano, chilli flakes on the side.', fill: 'Three tortillas each, a full cup of rajma, and 100 g paneer or tofu strips seared on the side.', rec: 'tacos' },
+    { d: 'Fri', n: '13', t: 'Lemon-herb paneer souvlaki bowl with tzatziki', p: 'Grilled lemon-oregano paneer skewers over amaranth with roasted vegetables, chickpea salad, tzatziki and olives.', tag: 'Mediterranean', pr: '55 / 40', low: 'Low spice: lemon, oregano, garlic and olive oil. No chilli.', fill: '175 g paneer each, a full bowl of amaranth, roasted vegetables and a chickpea-cucumber salad.', rec: 'souvlaki' },
+    { d: 'Sat', n: '14', out: true, t: 'Lunch out: Dipali’s fun day', p: 'Nothing to cook. Tell us if you would rather cook at home.' },
+    { d: 'Sun', n: '15', t: 'Kerala vegetable stew with paneer and amaranth', p: 'A mild coconut-milk stew with carrot, beans, peas and paneer, served over steamed amaranth-rice with a tomato-cucumber salad and sauteed greens.', tag: 'South Indian', pr: '46 / 34', low: 'Low spice: black pepper, ginger and curry leaves only.', fill: '150 g paneer each, a full bowl of amaranth-rice and a bowl of sprouted moong salad.', rec: 'stew' }
+  ];
+  var D2 = [
+    { d: 'Sat', n: '14', t: 'Soft vegetable-moong khichdi with ghee, kadhi and cooked greens', p: 'Easy on the stomach and quick to make. Eat early, around 7 pm.', m: 'Protein about 22 g.' },
+    { d: 'Sun', n: '15', t: 'Lauki-chana dal with a small juwar rotli and kachumber', p: 'Light and warm, with little oil. Eat early.', m: 'Protein about 24 g.' },
+    { d: 'Mon', n: '16', t: 'Warm vegetable and lentil soup with paneer cubes', p: 'Carrot, pumpkin, red lentil and a squeeze of lemon, with soft paneer on top. A good soft option for a light night.', m: 'Protein about 22 g.' }
+  ];
+  var X2 = [
+    { tag: 'Italian', t: 'Moong-dal pizza with paneer and veg', p: 'A thick moong-dal base, tomato sauce, paneer and vegetables. Add a big salad.', m: 'Protein about 48 / 36 g.' },
+    { tag: 'Chinese-style', t: 'Kung pao tofu with quinoa', p: 'Your own recipe. Add stir-fried greens and peanuts to keep it filling.', m: 'Protein about 46 / 34 g.' },
+    { tag: 'Indian', cls: 'guj', t: 'Chole with quinoa and a big salad', p: 'A comfort meal you already make. Add yogurt and a raw salad.', m: 'Protein about 44 / 32 g.' }
+  ];
+  var L2 = [
+    ['Vegetables and greens', ['Palak, 750 g (Monday and for the week)', 'Beetroot, 4', 'Carrot, 1 kg', 'Cucumber, 6', 'Tomatoes, 2 kg', 'Cauliflower, 3 large', 'Red pumpkin, 1 kg', 'French beans, 500 g', 'Peas, 500 g', 'Lilva and tuver, 500 g each (if lilva is not in the market, use peas and surti papdi)', 'Mushrooms, 300 g', 'Cabbage, 1 small', 'Capsicum, 4', 'Lauki, 1 medium', 'Zucchini, 2 and eggplant, 1 for roasting', 'Onion, 1 kg', 'Ginger, garlic, green chilli, lemon, lime', 'Coriander, mint, methi, curry leaves', 'Avocado, 2 only if the price is fine (cashew crema is the swap)']],
+    ['Grains and flours', ['Quinoa, 1 kg', 'Amaranth, 500 g', 'Rice, 500 g (for khichdi and stew)', 'Juwar flour, 500 g', 'Moong dal, 1 kg', 'Tuver dal or red lentils, 250 g', 'Chana dal, 250 g', 'Rajma, 500 g', 'Chickpeas, 500 g']],
+    ['Protein', ['Paneer, about 1.5 kg', 'Tofu, about 1 kg', 'Walnuts, 250 g (cashews or pumpkin seeds if walnuts are too pricey)', 'Cashews, 300 g', 'Peanuts, 150 g', 'Pumpkin and hemp seeds, sesame, tahini']],
+    ['Dairy and oils', ['Thick yogurt, 2 kg', 'Buttermilk or chaas, 1 litre', 'Ghee, 500 g', 'Olive oil', 'Coconut milk, 3 tins (check: no gums, no added sugar)']],
+    ['Pantry', ['Red curry paste, 1 small jar (check the label: no added sugar or preservatives)', 'Kaffir lime leaves or lime zest, as a swap', 'Paprika, cumin, oregano', 'Besan, 250 g (for kadhi)', 'Gluten-free tamari or coconut aminos, if you can find it', 'Olives, 1 jar', 'Black pepper, hing, jeera', 'Monk fruit sweetener, for the optional shrikhand']]
+  ];
+
   var L1 = [
     ['For Monday 2 Nov', ['Moong dal and rice or quinoa-amaranth (you may have these already)', 'Thick yogurt, 1 kg', 'Cucumber, onion, palak', 'Ghee']],
     ['Vegetables and greens', ['Capsicum, 4', 'Mushrooms, 500 g', 'Broccoli, 2 heads', 'Tomatoes, 2 kg', 'Cauliflower, 1 large', 'Cucumber, carrot, cabbage for salads', 'Lauki, 1 medium', 'Winter vegetables for undhiyu: surti papdi, tuver, lilva, raw banana, brinjal, sweet potato (as available)', 'Avocado, 3 if the price is fine', 'Ginger, garlic, green chilli, lemon, lime', 'Coriander, mint, methi, curry leaves']],
@@ -165,7 +195,11 @@ details .body p{margin:0;color:var(--muted)}
     { id: 'fajita', t: 'Paneer-tofu fajita bowl', n: 'Quick and fuller than it looks.', i: ['150 g paneer and 200 g tofu in strips', 'Capsicum and onion, sliced', '1 tsp cumin, 1 tsp paprika, 1 tsp oregano, salt, lime', 'Rajma (cooked), guacamole, cashew crema, kachumber', 'Cauliflower-quinoa rice'], s: ['Toss the paneer, tofu and spices with a spoon of olive oil. Sear in a hot pan until golden, then set aside.', 'Sear the capsicum and onion 4 minutes.', 'Warm the rajma with a pinch of cumin.', 'Build the bowl: rice, rajma, paneer and tofu, vegetables, guacamole and crema.'] },
     { id: 'shakshuka', t: 'Tofu shakshuka', n: 'Mediterranean breakfast-for-lunch, no egg.', i: ['250 g soft or firm tofu, in large chunks', '1 onion, 1 capsicum, 3 garlic, 4 tomatoes', '1 tsp paprika, 1 tsp cumin, salt, pinch of black salt', 'Hummus, quinoa tabbouleh (quinoa, parsley, tomato, cucumber, lemon, olive oil), tzatziki'], s: ['Sauté onion, capsicum and garlic in olive oil. Add tomatoes and spices and cook 10 minutes into a thick sauce.', 'Press the tofu chunks into the sauce, cover and simmer 8 minutes.', 'Finish with black salt, coriander and olive oil.', 'Serve with the hummus, tabbouleh and tzatziki.'] },
     { id: 'muthiya', t: 'Juwar-lauki muthiya', n: 'Steamed Gujarati dumplings, gluten-free with juwar.', i: ['1 cup juwar flour, 1/2 cup besan', '1 cup grated lauki, chopped methi or coriander', 'Ginger, green chilli, turmeric, salt, 1 tsp olive oil, 1 tsp lemon', 'Tadka: ghee, mustard, sesame, curry leaves'], s: ['Mix everything into a soft dough. Do not add water, the lauki gives enough.', 'Shape into rolls and steam for 15 minutes. Cool, then slice.', 'Heat ghee, splutter mustard, sesame and curry leaves, and toss the slices until crisp.', 'Serve with moong dal and the winter vegetables.'] },
-    { id: 'teriyaki', t: 'Tofu teriyaki bowl', n: 'Sticky ginger-garlic tofu, no sugar.', i: ['250 g extra-firm tofu, cubed', 'Sauce: 2 tbsp gluten-free tamari or coconut aminos, 1 tbsp sesame oil, ginger, garlic, 1 tsp monk fruit, 1 tsp arrowroot in a little water', 'Broccoli, mushrooms, sesame seeds', 'Quinoa'], s: ['Sear the tofu in olive oil until golden.', 'Add the broccoli and mushrooms and cook 4 minutes.', 'Pour in the sauce and stir until it thickens and coats everything, 1 to 2 minutes.', 'Serve over quinoa with sesame seeds and a quick cucumber-carrot pickle.'] }
+    { id: 'teriyaki', t: 'Tofu teriyaki bowl', n: 'Sticky ginger-garlic tofu, no sugar.', i: ['250 g extra-firm tofu, cubed', 'Sauce: 2 tbsp gluten-free tamari or coconut aminos, 1 tbsp sesame oil, ginger, garlic, 1 tsp monk fruit, 1 tsp arrowroot in a little water', 'Broccoli, mushrooms, sesame seeds', 'Quinoa'], s: ['Sear the tofu in olive oil until golden.', 'Add the broccoli and mushrooms and cook 4 minutes.', 'Pour in the sauce and stir until it thickens and coats everything, 1 to 2 minutes.', 'Serve over quinoa with sesame seeds and a quick cucumber-carrot pickle.'] },
+    { id: 'thai', t: 'Mild Thai red curry with tofu', n: 'Fast and creamy, with a gentle spice.', i: ['250 g tofu, cubed', '1 tbsp red curry paste (start with 1 tsp if you want it very mild)', '1 tin coconut milk, 1 cup red pumpkin cubes, a handful of beans, a few mushrooms', 'Ginger, lime juice and zest, salt, a little monk fruit', 'Cauliflower rice, cabbage-carrot-peanut salad'], s: ['Sear the tofu in a spoon of olive oil until golden, then set aside.', 'Fry the curry paste and ginger 1 minute in a little oil, then add half the coconut milk and the pumpkin and cook 8 minutes.', 'Add the remaining coconut milk, beans and mushrooms and simmer 5 minutes. Return the tofu.', 'Finish with lime juice and zest. Taste for salt.', 'Serve over cauliflower rice with the salad.'] },
+    { id: 'tacos', t: 'Cauliflower-walnut tacos', n: 'A different taco filling with a meaty bite. Use the tortilla recipe above.', i: ['1 large cauliflower, cut small', '1/2 cup walnuts, roughly chopped (cashews or pumpkin seeds as a swap)', '1 tsp cumin, 1 tsp paprika, 1 tsp oregano, salt, lime, 2 tbsp olive oil', 'Warm rajma, cashew crema, kachumber', 'Juwar tortillas'], s: ['Toss the cauliflower and walnuts with the oil and spices. Roast at 220 C or air-fry for 20 minutes until browned at the edges.', 'Blend soaked cashews with water, lime juice and salt for the crema.', 'Warm the rajma with a pinch of cumin.', 'Fill each tortilla with rajma, the cauliflower mix, crema and kachumber.'] },
+    { id: 'souvlaki', t: 'Lemon-herb paneer souvlaki bowl', n: 'Greek-style skewers, no cooking skill needed.', i: ['350 g paneer, cubed', 'Marinade: 3 tbsp olive oil, juice of 1 lemon, 1 tsp oregano, 3 garlic cloves, salt', 'Amaranth, cooked; roasted zucchini, capsicum and eggplant', 'Chickpea-cucumber-tomato salad, tzatziki, olives'], s: ['Marinate the paneer 30 minutes.', 'Thread onto skewers or sear in a pan 2 minutes a side until golden.', 'Roast the vegetables with olive oil and salt for 20 minutes.', 'Build the bowl: amaranth, vegetables, chickpea salad, skewers, tzatziki and olives.'] },
+    { id: 'stew', t: 'Kerala vegetable stew with paneer', n: 'Gentle, creamy and white. Very mild.', i: ['1 tin coconut milk, plus 1 cup water', 'Carrot, beans, peas, a small potato or pumpkin', '150 g paneer', 'Ginger, curry leaves, black pepper, whole cloves (2), 1 small cinnamon stick, salt', 'Steamed amaranth-rice'], s: ['Heat a spoon of ghee or coconut oil, add the whole spices, ginger and curry leaves.', 'Add the vegetables, water and half the coconut milk and simmer until soft, about 12 minutes.', 'Add the paneer and the remaining coconut milk and warm through. Do not boil hard.', 'Finish with black pepper and a spoon of ghee. Serve over amaranth-rice.'] }
   ];
 
   /* ---------- rendering ---------- */
@@ -294,13 +328,18 @@ details .body p{margin:0;color:var(--muted)}
     var box2 = h('div', { class: 'shoplist' }, [toolsEl(grid, groups), grid]);
     return box2;
   }
-  function week(panel, kicker, title, sub, days, extras, lists, key) {
+  function dinnerEl(x) {
+    return h('div', { class: 'swap' }, [h('span', { class: 'tag', style: 'align-self:flex-start', text: x.d + ' ' + x.n }), h('h3', { text: x.t }), h('p', { text: x.p }), h('span', { class: 'meta', text: x.m })]);
+  }
+  function week(panel, kicker, title, sub, days, extras, lists, key, dinners) {
     panel.appendChild(h('div', null, [h('div', { class: 'kicker', text: kicker }), h('h2', { text: title }), h('p', { class: 'sub', text: sub }), h('div', { class: 'days' }, days.map(dayEl))]));
+    if (dinners) panel.appendChild(h('div', null, [h('h2', { text: 'Optional light dinners' }), h('p', { class: 'sub', text: 'Lunch is the main meal. If you want something in the evening, these are light, soft and mild. Eat early.' }), h('div', { class: 'swaps' }, dinners.map(dinnerEl))]));
     panel.appendChild(h('div', null, [h('h2', { text: 'Three extras to pick from' }), h('p', { class: 'sub', text: 'Swap any of these in for a day you want something different. All are filling.' }), h('div', { class: 'swaps' }, extras.map(swapEl))]));
     panel.appendChild(h('div', null, [h('h2', { text: 'Shopping list' }), h('p', { class: 'sub', text: 'Tap to tick off. Choose organic or pesticide-free where you can. Check jars and cans: no added sugar, no seed oils, no gums in the coconut milk.' }), listEl(lists, key)]));
   }
 
   week(document.getElementById('p-w1'), 'Monday 2 to Sunday 8 November', 'This week', 'Protein shown as Rushi / Dipali for the plate.', W1, X1, L1, 'dm-w1');
+  week(document.getElementById('p-w2'), 'Monday 9 to Sunday 15 November', 'Next week', 'Protein shown as Rushi / Dipali for the plate.', W2, X2, L2, 'dm-w2', D2);
 
   var rec = document.getElementById('p-rec');
   rec.appendChild(h('div', null, [h('h2', { text: 'Recipes for the new dishes' }), h('p', { class: 'sub', text: 'Quantities are for two. Dishes you already make are not listed. These are starting points, so taste and adjust.' })]));
@@ -315,7 +354,7 @@ details .body p{margin:0;color:var(--muted)}
   rec.appendChild(list);
 
   /* ---------- tabs ---------- */
-  var ids = ['w1', 'rec'];
+  var ids = ['w1', 'w2', 'rec'];
   function show(id) {
     ids.forEach(function (k) {
       document.getElementById('p-' + k).hidden = (k !== id);
